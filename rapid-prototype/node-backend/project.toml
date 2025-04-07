@@ -1,0 +1,7 @@
+[build]
+env = [
+  "NODE_ENV=production"
+]
+
+[metadata]
+version = "1.0.0" 
