@@ -33,9 +33,28 @@
 # -----------------------------------------------------------------------------
 export TF_VAR_project_id=${1:-"ai-web-component-00"}
 export TF_VAR_github_repository=${2:-"tombanjo/ai-web-component"}
+export PROJECT_NUMBER=$(gcloud projects describe "${TF_VAR_project_id}" --format='value(projectNumber)')
+
 
 # Change to the desired working directory
 cd terraform/stages/github-provider || { echo "Directory 'terraform/stages/github-provider' not found."; exit 1; }
+
+terraform import google_iam_workload_identity_pool.github_pool \
+    "projects/${TF_VAR_project_id}/locations/global/workloadIdentityPools/github-actions-pool"
+terraform import google_iam_workload_identity_pool_provider.github_provider \
+    "projects/${TF_VAR_project_id}/locations/global/workloadIdentityPools/github-actions-pool/providers/github-actions-provider"
+
+
+# Check if the Service Account exists
+gcloud iam service-accounts describe "github-actions@${TF_VAR_project_id}.iam.gserviceaccount.com" \
+  --project="${TF_VAR_project_id}" >/dev/null 2>&1
+if [ $? -eq 0 ]; then
+  echo "Service Account exists. Importing into Terraform state..."
+  terraform import google_service_account.github_actions \
+    "projects/${TF_VAR_project_id}/serviceAccounts/github-actions@${TF_VAR_project_id}.iam.gserviceaccount.com"
+else
+  echo "Service Account does not exist. It will be created by Terraform."
+fi
 
 # Run Terraform commands
 terraform init -input=false

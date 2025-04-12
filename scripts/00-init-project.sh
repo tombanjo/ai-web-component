@@ -87,4 +87,6 @@ echo "Enabling Necessary APIs..."
 PROJECT_NUMBER=$(gcloud projects describe $PROJECT_ID --format="value(projectNumber)")
 gcloud services enable iamcredentials.googleapis.com --project=$PROJECT_NUMBER
 gcloud services enable cloudresourcemanager.googleapis.com --project=$PROJECT_NUMBER
+gcloud services enable artifactregistry.googleapis.com --project=$PROJECT_NUMBER
+gcloud services enable run.googleapis.com --project=$PROJECT_NUMBER
 echo "Enabling IAM Credentials API complete."

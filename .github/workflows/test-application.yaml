@@ -1,6 +1,11 @@
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - application/test-application/** # Only trigger on changes in this folder
   workflow_dispatch:
-    
+
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -19,8 +24,9 @@ jobs:
           workload_identity_provider: 'projects/${{ secrets.PROJECT_ID }}/locations/global/workloadIdentityPools/${{ secrets.WORKLOAD_IDENTITY_POOL_ID }}/providers/${{ secrets.WORKLOAD_IDENTITY_POOL_PROVIDER_ID }}'
           service_account: ${{ secrets.SERVICE_ACCOUNT_EMAIL }}
       
-      - id: 'verify-auth'
-        name: 'Verify Authentication'
+      - id: 'upload-artifact'
+        name: 'Upload Artifact'
         run: |
-          gcloud auth list
-          gcloud projects list
+          WORKING_DIR="application/test-application"
+          cd $WORKING_DIR || { echo "Directory $WORKING_DIR not found."; exit 1; }
+          bash upload-to-cloud-storage.sh
