@@ -1,0 +1,29 @@
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment: rapid-prototype
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    
+    steps:
+      - uses: 'actions/checkout@v3'
+      
+      - id: 'auth'
+        name: 'Authenticate to Google Cloud'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          workload_identity_provider: 'projects/${{ secrets.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ secrets.WORKLOAD_IDENTITY_POOL_ID }}/providers/${{ secrets.WORKLOAD_IDENTITY_PROVIDER_ID }}'
+          service_account: '${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL }}'
+      
+      - id: 'verify-auth'
+        name: 'Verify Authentication'
+        run: |
+          gcloud auth list
+          gcloud projects list
