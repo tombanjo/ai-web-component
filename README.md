@@ -3,9 +3,3 @@ Project to provide generic Web-Component based AI features to any web applicatio
 
 
 ## Technology
-
-### Cursor AI
-### Terraform
-### Google Cloud CLI
-### Docker Desktop
-### NodeJS / NPM
