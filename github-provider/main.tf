@@ -1,4 +1,11 @@
 terraform {
+  backend "gcs" {
+    bucket         = "terraform-remote-state-ai-web-component-00"
+    prefix         = "dev/terraform/state"
+  }
+}
+
+terraform {
   required_providers {
     google = {
       source  = "hashicorp/google"
@@ -21,7 +28,7 @@ resource "google_service_account" "github_actions" {
 }
 
 # Create a Workload Identity Pool
-resource "google_iam_workload_identity_pool" "github" {
+resource "google_iam_workload_identity_pool" "github_pool" {
   project                       = var.project_id
   workload_identity_pool_id     = var.workload_identity_pool_id
   display_name                 = "GitHub Actions Pool"
@@ -29,9 +36,9 @@ resource "google_iam_workload_identity_pool" "github" {
 }
 
 # Create a Workload Identity Pool Provider for GitHub
-resource "google_iam_workload_identity_pool_provider" "github" {
+resource "google_iam_workload_identity_pool_provider" "github_provider" {
   project                                    = var.project_id
-  workload_identity_pool_id                 = google_iam_workload_identity_pool.github.workload_identity_pool_id
+  workload_identity_pool_id                 = google_iam_workload_identity_pool.github_pool.workload_identity_pool_id
   workload_identity_pool_provider_id        = var.workload_identity_pool_provider_id
   display_name                             = "GitHub Actions Provider"
   description                             = "OIDC identity pool provider for GitHub Actions"
@@ -57,7 +64,7 @@ resource "google_iam_workload_identity_pool_provider" "github" {
 resource "google_service_account_iam_member" "github_actions_identity" {
   service_account_id = google_service_account.github_actions.name
   role               = "roles/iam.workloadIdentityUser"
-  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github.name}/attribute.repository/${var.github_repository}"
+  member             = "principalSet://iam.googleapis.com/${google_iam_workload_identity_pool.github_pool.name}/attribute.repository/${var.github_repository}"
 }
 
 # Grant admin privileges to the service account
@@ -65,4 +72,4 @@ resource "google_project_iam_member" "github_actions_admin" {
   project = var.project_id
   role    = "roles/owner"
   member  = "serviceAccount:${google_service_account.github_actions.email}"
-} 
+}

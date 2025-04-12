@@ -1,5 +1,0 @@
-project_id = "your-project-id"
-bucket_name = "static-web-bucket"
-service_name = "node-backend"
-backend_image = "gcr.io/your-project-id/node-backend:latest"
-load_balancer_name = "node-backend-lb"

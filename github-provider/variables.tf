@@ -24,4 +24,4 @@ variable "workload_identity_pool_provider_id" {
   description = "The ID of the Workload Identity Pool Provider"
   type        = string
   default     = "github-actions-provider"
-} 
+}
