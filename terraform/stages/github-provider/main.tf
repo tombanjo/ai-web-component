@@ -1,7 +1,7 @@
 terraform {
   backend "gcs" {
     bucket         = "terraform-remote-state-ai-web-component-00"
-    prefix         = "dev/terraform/state"
+    prefix         = "dev/terraform/state/github-provider"
   }
 }
 

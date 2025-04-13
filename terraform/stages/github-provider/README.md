@@ -36,8 +36,16 @@ module "github_actions_auth" {
 To use this in your GitHub Actions workflow, add the following authentication step:
 
 ```yaml
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    
 jobs:
   deploy:
+    runs-on: ubuntu-latest
+    environment: rapid-prototype
     permissions:
       contents: 'read'
       id-token: 'write'
@@ -49,8 +57,14 @@ jobs:
         name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v1'
         with:
-          workload_identity_provider: 'projects/${{ secrets.GCP_PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ secrets.WORKLOAD_IDENTITY_POOL_ID }}/providers/${{ secrets.WORKLOAD_IDENTITY_PROVIDER_ID }}'
-          service_account: '${{ secrets.GCP_SERVICE_ACCOUNT_EMAIL }}'
+          workload_identity_provider: 'projects/${{ secrets.PROJECT_ID }}/locations/global/workloadIdentityPools/${{ secrets.WORKLOAD_IDENTITY_POOL_ID }}/providers/${{ secrets.WORKLOAD_IDENTITY_POOL_PROVIDER_ID }}'
+          service_account: ${{ secrets.SERVICE_ACCOUNT_EMAIL }}
+      
+      - id: 'verify-auth'
+        name: 'Verify Authentication'
+        run: |
+          gcloud auth list
+          gcloud projects list
 ```
 
 ## Prerequisites
