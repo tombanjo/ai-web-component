@@ -26,9 +26,8 @@ jobs:
 
       - name: Configure Application Default Credentials (ADC)
         run: |
-          gcloud auth application-default login --impersonate-service-account=${{ secrets.SERVICE_ACCOUNT_EMAIL }}
-
-          
+          gcloud auth application-default login --impersonate-service-account=${{ secrets.SERVICE_ACCOUNT_EMAIL }} --quiet        
+      
       - id: 'verify-auth'
         name: 'Verify Authentication'
         run: |
