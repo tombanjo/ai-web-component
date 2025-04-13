@@ -23,11 +23,13 @@ jobs:
         with:
           workload_identity_provider: 'projects/${{ secrets.PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ secrets.WORKLOAD_IDENTITY_POOL_ID }}/providers/${{ secrets.WORKLOAD_IDENTITY_POOL_PROVIDER_ID }}'
           service_account: ${{ secrets.SERVICE_ACCOUNT_EMAIL }}
-
+          
       - id: 'verify-auth'
         name: 'Verify Authentication'
-        run: gcloud auth list
-              
+        run: |
+          gcloud auth list
+          gcloud projects list
+      
       - id: 'upload-artifact'
         name: 'Upload Artifact'
         run: |
