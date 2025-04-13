@@ -2,11 +2,20 @@ class AIChatInterface extends HTMLElement {
   constructor() {
     super();
     this.attachShadow({ mode: 'open' });
+    this._data = null; // Private property to store data
+  }
+
+  set data(value) {
+    this._data = value;
+    this.fetchChatResponse(); // Trigger fetchChatResponse when data is updated
+  }
+
+  get data() {
+    return this._data;
   }
 
   connectedCallback() {
     this.render();
-    this.fetchChatResponse();
   }
 
   render() {
@@ -35,7 +44,13 @@ class AIChatInterface extends HTMLElement {
 
   async fetchChatResponse() {
     try {
-      const response = await fetch('https://chat-service-71966184676.us-central1.run.app/'); // Replace with actual URL
+      const response = await fetch('https://chat-service-71966184676.us-central1.run.app/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(this._data), // Send the updated data as JSON
+      });
       const data = await response.text();
       this.shadowRoot.querySelector('.response').textContent = data;
     } catch (error) {

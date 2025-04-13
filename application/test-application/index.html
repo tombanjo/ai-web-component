@@ -1,15 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
   <script type="module" src="./web-component/ai-chat-interface.js"></script>
-  Hello World!
-  <ai-chat-interface></ai-chat-interface>
+  <body>
+    <div>
+      <textarea id="inputBox" placeholder="Enter your message here..." rows="10" cols="50"></textarea>
+      <br>
+      <button id="submitButton">Submit</button>
+      <button id="clearButton">Clear</button>
+    </div>
+    <ai-chat-interface></ai-chat-interface>
     <script>
-        const chatInterface = document.querySelector('ai-chat-interface');
-        chatInterface.addEventListener('message', (event) => {
+      const chatInterface = document.querySelector('ai-chat-interface');
+      const inputBox = document.getElementById('inputBox');
+      const submitButton = document.getElementById('submitButton');
+      const clearButton = document.getElementById('clearButton');
+
+      submitButton.addEventListener('click', () => {
+        const data = inputBox.value;
+        if (data.trim()) {
+          chatInterface.data = JSON.stringify({ message: data });
+        }
+      });
+
+      clearButton.addEventListener('click', () => {
+        inputBox.value = '';
+      });
+
+      chatInterface.addEventListener('message', (event) => {
         console.log('Message from AI:', event.detail);
-        });
-        chatInterface.addEventListener('error', (event) => {
+      });
+
+      chatInterface.addEventListener('error', (event) => {
         console.error('Error from AI:', event.detail);
-        });
+      });
     </script>
+  </body>
 </html>

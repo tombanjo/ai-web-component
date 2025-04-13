@@ -9,8 +9,18 @@ const corsOptions = {
 };
 app.use(cors(corsOptions));
 
-app.get('/', (req, res) => {
-  res.status(200).send('Hello World It Really Works!');
+app.post('/', async (req, res) => {
+  try {
+    const chunks = [];
+    for await (const chunk of req) {
+      chunks.push(chunk);
+    }
+    const body = Buffer.concat(chunks).toString(); // Combine chunks and convert to string
+    const jsonPayload = JSON.parse(body); // Parse JSON payload
+    res.status(200).json(jsonPayload); // Echo back the JSON payload
+  } catch (error) {
+    res.status(400).send('Invalid JSON payload'); // Handle invalid JSON
+  }
 });
 
 app.listen(port, () => {
