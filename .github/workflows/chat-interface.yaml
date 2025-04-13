@@ -30,6 +30,13 @@ jobs:
           gcloud auth list
           gcloud projects list
           
+      - id: 'install-pack'
+        name: 'Install pack CLI'
+        run: |
+          echo "Installing pack CLI..."
+          curl -sSL "https://github.com/buildpacks/pack/releases/download/v0.37.0/pack-v0.37.0-linux.tgz" | tar -xzv
+          sudo mv pack /usr/local/bin/
+          
       - id: 'upload-artifact'
         name: 'Upload Artifact'
         run: |
