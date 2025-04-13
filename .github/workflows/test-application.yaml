@@ -24,10 +24,6 @@ jobs:
           workload_identity_provider: 'projects/${{ secrets.PROJECT_NUMBER }}/locations/global/workloadIdentityPools/${{ secrets.WORKLOAD_IDENTITY_POOL_ID }}/providers/${{ secrets.WORKLOAD_IDENTITY_POOL_PROVIDER_ID }}'
           service_account: ${{ secrets.SERVICE_ACCOUNT_EMAIL }}
 
-      - name: Configure Application Default Credentials (ADC)
-        run: |
-          gcloud auth application-default login --impersonate-service-account=${{ secrets.SERVICE_ACCOUNT_EMAIL }} --quiet        
-      
       - id: 'verify-auth'
         name: 'Verify Authentication'
         run: |
