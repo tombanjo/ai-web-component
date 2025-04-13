@@ -35,7 +35,7 @@ class AIChatInterface extends HTMLElement {
 
   async fetchChatResponse() {
     try {
-      const response = await fetch('https://cloudrunservice/'); // Replace with actual URL
+      const response = await fetch('https://chat-service-71966184676.us-central1.run.app/'); // Replace with actual URL
       const data = await response.text();
       this.shadowRoot.querySelector('.response').textContent = data;
     } catch (error) {

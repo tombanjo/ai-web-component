@@ -27,6 +27,7 @@ jobs:
       - id: 'upload-artifact'
         name: 'Upload Artifact'
         run: |
+          gcloud auth configure-docker us-central1-docker.pkg.dev
           WORKING_DIR="application/chat-interface"
           cd $WORKING_DIR || { echo "Directory $WORKING_DIR not found."; exit 1; }
           bash publish-build.sh

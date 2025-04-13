@@ -14,7 +14,6 @@ terraform {
   }
 }
 
-
 # Project + basic config
 data "google_project" "project" {}
 
@@ -24,6 +23,7 @@ provider "google" {
 }
 
 # ========== Cloud Run ==========
+
 resource "google_cloud_run_service" "service" {
   name     = var.service_name
   location = var.region
@@ -51,27 +51,10 @@ resource "google_cloud_run_service" "service" {
   autogenerate_revision_name = true
 }
 
-resource "google_service_account" "custom_iap_user" {
-  account_id   = "iap-authenticated-user"
-  display_name = "IAP Authenticated User (No Roles)"
-}
-
-
-# Allow IAP to invoke Cloud Run
+# Allow unauthenticated access to Cloud Run
 resource "google_cloud_run_service_iam_member" "run_invoker" {
   service  = google_cloud_run_service.service.name
   location = var.region
   role     = "roles/run.invoker"
-  member   = "serviceAccount:${google_service_account.custom_iap_user.email}"
-}
-
-# ========== IAP Binding for Chat ==========
-# Configures IAP access for the chat service
-resource "google_cloud_run_service_iam_binding" "iap_access" {
-  project  = var.project_id
-  service  = google_cloud_run_service.service.name
-  location = var.region
-
-  role    = "roles/iap.httpsResourceAccessor"
-  members = ["domain:gmail.com"]
+  member   = "allUsers"
 }
