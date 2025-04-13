@@ -44,4 +44,4 @@ jobs:
           WORKING_DIR="application/chat-interface"
           cd $WORKING_DIR || { echo "Directory $WORKING_DIR not found."; exit 1; }
           bash publish-build.sh
-          bash deploy-to-cloudrun.sh
+          bash deploy-to-cloud-run.sh
