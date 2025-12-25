@@ -15,16 +15,20 @@
       const submitButton = document.getElementById('submitButton');
       const clearButton = document.getElementById('clearButton');
 
-      submitButton.addEventListener('click', () => {
+      function sendChat() {
         const data = inputBox.value;
         if (data.trim()) {
           chatInterface.data = JSON.stringify({ message: data });
         }
-      });
-
-      clearButton.addEventListener('click', () => {
+      }
+      
+      function clear() {
         inputBox.value = '';
-      });
+        chatInterface.data = JSON.stringify({ message: '' });
+      }
+      submitButton.addEventListener('click', clickListener );
+
+      clearButton.addEventListener('click', );
 
       chatInterface.addEventListener('message', (event) => {
         console.log('Message from AI:', event.detail);

@@ -58,3 +58,9 @@ resource "google_cloud_run_service_iam_member" "run_invoker" {
   role     = "roles/run.invoker"
   member   = "allUsers"
 }
+
+resource "google_project_iam_member" "cloudrun_vertexai_access" {
+  project = var.project_id
+  role    = "roles/aiplatform.user"
+  member  = "serviceAccount:${data.google_project.project.number}-compute@developer.gserviceaccount.com"
+}

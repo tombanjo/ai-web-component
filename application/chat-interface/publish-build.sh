@@ -9,7 +9,7 @@ IMAGE_NAME="${REGION}-docker.pkg.dev/${PROJECT_ID}/${SERVICE_NAME}/${SERVICE_NAM
 # Step 1: Build the container image using the Cloud Native Buildpacks
 echo "Building the container image using buildpacks..."
 pack build "${IMAGE_NAME}" \
-  --builder gcr.io/buildpacks/builder:v1 \
+  --builder gcr.io/buildpacks/builder:google-22 \
   --path . \
   --publish \
   --tag "$IMAGE_NAME"
